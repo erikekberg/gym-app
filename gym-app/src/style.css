@@ -1,0 +1,84 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.header {
+  width: 100vw;
+  height: 10vh;
+  background-color: black;
+  color: yellow;
+  display: flex;
+  padding: 0 70px;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header ul {
+  flex: 2;
+  list-style: none;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10vw;
+}
+
+.main {
+  margin-top: 2vh;
+  height: 88vh;
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+  grid-template-rows: 1fr 10fr;
+}
+
+.main .hashtags {
+  grid-column: 1 / 2;
+  grid-row: 1 / -1;
+  position: fixed;
+  top: 50vh;
+}
+
+.main .content-feed {
+  grid-column: 2 / 3;
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  row-gap: 1vh;
+  overflow-y: scroll;
+  grid-row: 2 / -1;
+}
+
+.make-post {
+  grid-column: 2 / 3;
+  grid-row: 1 / 2;
+  height: 5vh;
+}
+
+.make-post textarea {
+  height: 5vh;
+  padding: 5px;
+  width: 100%;
+}
+
+.main .content-feed::-webkit-scrollbar {
+  display: none;
+}
+
+.post {
+  border: 1px black solid;
+  min-height: 20vh;
+  width: 50vw;
+  padding: 20px;
+}
+
+.post h4 {
+  color: gray;
+}
+
+.main .trending {
+  grid-column: 3 / 4;
+  position: fixed;
+  top: 50vh;
+  right: 0;
+  grid-row: 1 / -1;
+}
