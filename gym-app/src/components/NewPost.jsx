@@ -1,25 +1,35 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { addPost } from "../firebaseManager";
 
-function NewPost() {
-  let textcontent = "";
+function NewPost(props) {
+  const [textcontent, setTextcontent] = useState("");
   const textareaRef = useRef(null);
 
   useEffect(() => {
-    console.log(textareaRef.current.value);
+    console.log(props.currentUser);
   });
 
   return (
     <div className="make-post">
-      <button onClick={(e) => addPost("erik", "@erkan", textcontent)}>+</button>
+      <button
+        onClick={(e) => {
+          if (props.currentUser) {
+            addPost(props.currentUser, `@${props.currentUser}`, textcontent);
+            props.newPostHandler();
+          }
+        }}
+      >
+        +
+      </button>
       <textarea
-        onChange={() => (textcontent = textareaRef.current.value)}
+        onChange={() => setTextcontent(textareaRef.current.value)}
         ref={textareaRef}
         placeholder="make a post"
         name="post"
         id="new-post"
         cols="30"
         rows="10"
+        maxLength={708}
       ></textarea>
     </div>
   );

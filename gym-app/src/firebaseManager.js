@@ -29,18 +29,48 @@ async function getPosts() {
   const docSnap = await getDocs(collection(db, "posts"));
   const postArr = [];
   docSnap.forEach((doc) => {
-    postArr.push(doc.data());
+    postArr.unshift(doc.data());
   });
   return postArr;
 }
 
 async function addPost(user, usertag, textcontent) {
-  console.log(user, usertag, textcontent);
+  console.log("hello");
   await setDoc(doc(db, "posts", Date.now().toString()), {
-    user: "erik",
-    usertag: "@erkan",
+    user: user,
     textcontent: textcontent,
   });
 }
 
-export { getPosts, addPost };
+async function validateSignIn(username, enteredPassword) {
+  try {
+    const data = await getDoc(doc(db, "users", username));
+    const actualPassword =
+      data._document.data.value.mapValue.fields.password.stringValue;
+    if (actualPassword === enteredPassword) {
+      return true;
+    } else {
+      console.log("wrong username or password");
+      return false;
+    }
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+async function createUser(username, password) {
+  if ((await (await getDoc(doc(db, "users", username))).data()) !== undefined) {
+    console.log("username already taken");
+  } else {
+    try {
+      await setDoc(doc(db, "users", username), {
+        password: password,
+      });
+      return true;
+    } catch {
+      console.log("error with profile creation");
+    }
+  }
+}
+
+export { getPosts, addPost, validateSignIn, createUser };

@@ -3,8 +3,9 @@ import Post from "./Post";
 import { getPosts, addPost } from "../firebaseManager";
 import NewPost from "./NewPost";
 
-function Main() {
+function Main(props) {
   const [posts, setPosts] = useState([]);
+  const [filter, setFilter] = useState("");
 
   useEffect(() => {
     updatePosts();
@@ -18,23 +19,58 @@ function Main() {
     <div className="main">
       <div className="hashtags">
         <ul>
-          <li>#gym</li>
-          <li>#Powerlifting</li>
-          <li>#lightweight</li>
+          <li
+            onClick={async () => {
+              setFilter("#gym");
+            }}
+          >
+            #gym
+          </li>
+          <li
+            onClick={async () => {
+              setFilter("#powerlifting");
+            }}
+          >
+            #Powerlifting
+          </li>
+          <li
+            onClick={async () => {
+              setFilter("#lightweight");
+            }}
+          >
+            #lightweight
+          </li>
         </ul>
       </div>
-      <NewPost />
+      <NewPost
+        newPostHandler={() => updatePosts()}
+        currentUser={props.currentUser}
+      />
       <div className="content-feed">
-        {posts.map((post) => (
-          <Post
-            user={post.user}
-            usertag={post.usertag}
-            textcontent={post.textcontent}
-          />
-        ))}
+        {posts
+          .filter((post) =>
+            post.textcontent.toLowerCase().includes(filter.toLowerCase())
+          )
+          .map((post) => (
+            <Post
+              user={post.user}
+              key={posts.indexOf(post)}
+              textcontent={post.textcontent}
+            />
+          ))}
       </div>
       <div className="trending">
-        <h2 onClick={() => console.log(posts)}>Trending Profiles:</h2>
+        <h2
+          onClick={() => {
+            setPosts(
+              posts.filter((post) => {
+                return post.textcontent.includes("#gym");
+              })
+            );
+          }}
+        >
+          Trending Profiles:
+        </h2>
         <ul>
           <li>@Cbum</li>
           <li>@ErikEkberg</li>

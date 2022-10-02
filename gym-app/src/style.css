@@ -16,7 +16,6 @@
 }
 
 .header ul {
-  flex: 2;
   list-style: none;
   display: flex;
   justify-content: flex-end;
