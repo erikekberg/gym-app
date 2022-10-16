@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import Post from "./Post";
-import { getPosts, addPost } from "../firebaseManager";
+import { getPosts, addPost, getUserData } from "../firebaseManager";
 import NewPost from "./NewPost";
+import { Link } from "react-router-dom";
 
 function Main(props) {
   const [posts, setPosts] = useState([]);
@@ -18,29 +19,50 @@ function Main(props) {
   return (
     <div className="main">
       <div className="hashtags">
+        <h2>Tredning hashtags:</h2>
         <ul>
           <li
             onClick={async () => {
-              setFilter("#gym");
+              if (filter === "#meme") {
+                setFilter("");
+              } else {
+                setFilter("#meme");
+              }
             }}
           >
-            #gym
+            #meme
           </li>
           <li
             onClick={async () => {
-              setFilter("#powerlifting");
+              if (filter === "#news") {
+                setFilter("");
+              } else {
+                setFilter("#news");
+              }
             }}
           >
-            #Powerlifting
+            #news
           </li>
           <li
             onClick={async () => {
-              setFilter("#lightweight");
+              if (filter === "#flitter") {
+                setFilter("");
+              } else {
+                setFilter("#flitter");
+              }
             }}
           >
-            #lightweight
+            #flitter
           </li>
         </ul>
+      </div>
+      <div className="search-bar">
+        <input
+          type="text"
+          placeholder="search"
+          value={filter}
+          onChange={(e) => setFilter(e.target.value)}
+        />
       </div>
       <NewPost
         newPostHandler={() => updatePosts()}
@@ -48,11 +70,14 @@ function Main(props) {
       />
       <div className="content-feed">
         {posts
-          .filter((post) =>
-            post.textcontent.toLowerCase().includes(filter.toLowerCase())
+          .filter(
+            (post) =>
+              post.textcontent.toLowerCase().includes(filter.toLowerCase()) ||
+              post.user.toLowerCase().includes(filter.toLowerCase())
           )
           .map((post) => (
             <Post
+              displayName={getUserData(post.user)}
               user={post.user}
               key={posts.indexOf(post)}
               textcontent={post.textcontent}
@@ -60,21 +85,17 @@ function Main(props) {
           ))}
       </div>
       <div className="trending">
-        <h2
-          onClick={() => {
-            setPosts(
-              posts.filter((post) => {
-                return post.textcontent.includes("#gym");
-              })
-            );
-          }}
-        >
-          Trending Profiles:
-        </h2>
+        <h2>Trending Profiles:</h2>
         <ul>
-          <li>@Cbum</li>
-          <li>@ErikEkberg</li>
-          <li>@Arnold</li>
+          <li>
+            <Link to="/profile/erkanperkan">@erkanperkan</Link>
+          </li>
+          <li>
+            <Link to="/profile/erikekberg">@erikekberg</Link>
+          </li>
+          <li>
+            <Link to="/profile/newaccountlol">@newaccountlol</Link>
+          </li>
         </ul>
       </div>
     </div>

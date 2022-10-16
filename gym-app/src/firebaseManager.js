@@ -7,6 +7,7 @@ import {
   getDocs,
   collection,
   setDoc,
+  updateDoc,
 } from "firebase/firestore";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -34,8 +35,12 @@ async function getPosts() {
   return postArr;
 }
 
+async function getUserData(username) {
+  const data = await getDoc(doc(db, "users", username));
+  return data._document.data.value.mapValue.fields;
+}
+
 async function addPost(user, usertag, textcontent) {
-  console.log("hello");
   await setDoc(doc(db, "posts", Date.now().toString()), {
     user: user,
     textcontent: textcontent,
@@ -53,9 +58,28 @@ async function validateSignIn(username, enteredPassword) {
       console.log("wrong username or password");
       return false;
     }
-  } catch (error) {
-    console.log(error);
+  } catch {
+    console.log("error");
   }
+}
+
+async function updateUserDescription(user, newDescription) {
+  await updateDoc(doc(db, "users", user), {
+    description: newDescription,
+  });
+}
+
+async function updateUserAvatar(user, newAvatar) {
+  console.log(newAvatar);
+  await updateDoc(doc(db, "users", user), {
+    avatar: newAvatar,
+  });
+}
+
+async function updateUserDisplayName(user, newDisplayName) {
+  await updateDoc(doc(db, "users", user), {
+    displayName: newDisplayName,
+  });
 }
 
 async function createUser(username, password) {
@@ -64,7 +88,11 @@ async function createUser(username, password) {
   } else {
     try {
       await setDoc(doc(db, "users", username), {
+        displayName: username,
         password: password,
+        description: "no description yet",
+        avatar:
+          "https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg",
       });
       return true;
     } catch {
@@ -73,4 +101,13 @@ async function createUser(username, password) {
   }
 }
 
-export { getPosts, addPost, validateSignIn, createUser };
+export {
+  getPosts,
+  addPost,
+  validateSignIn,
+  createUser,
+  getUserData,
+  updateUserDescription,
+  updateUserAvatar,
+  updateUserDisplayName,
+};
