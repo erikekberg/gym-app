@@ -204,11 +204,11 @@ a {
 .sign-in,
 .create-profile {
   height: 90vh;
-  width: 40vw;
+  width: 100vw;
   display: flex;
   flex-direction: column;
+  align-items: center;
   justify-content: space-around;
-  margin-left: 7vw;
 }
 
 .sign-in > div,
@@ -233,8 +233,31 @@ a {
 .sign-in button,
 .create-profile button {
   height: 5vh;
+  width: 10vw;
   border-radius: 7px;
   border: 1px solid yellow;
   background-color: #333;
   color: white;
+}
+
+@media screen and (max-width: 600px) {
+  .hashtags,
+  .trending {
+    display: none;
+  }
+  .header {
+    padding: 40px;
+  }
+  .main {
+    margin: 15px;
+    grid-template-columns: 0fr;
+    grid-template-rows: 1fr 1fr 10fr;
+  }
+  .post {
+    width: 91vw;
+  }
+  .sign-in button {
+    height: 7vh;
+    width: 45vw;
+  }
 }
