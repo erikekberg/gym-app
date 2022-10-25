@@ -241,6 +241,9 @@ a {
 }
 
 @media screen and (max-width: 600px) {
+  body {
+    overflow-y: hidden;
+  }
   .hashtags,
   .trending {
     display: none;
